@@ -6,20 +6,24 @@ const Bcrypt = require("bcryptjs");
 
 
 exports.userSignUp = function(req, res) {
+    if (!req.body.userName || !req.body.password || !req.body.userType) {
 
-    req.body.password = Bcrypt.hashSync(req.body.password, 10);
+        return res.status(500).send("object missing");
+    }
+    else {
+        req.body.password = Bcrypt.hashSync(req.body.password, 10);
 
-    const userAdd = new addUser.userTable(req.body);
+        const userAdd = new addUser.userTable(req.body);
 
-    userAdd.save(function(err,success){
-        if(err){
-            res.send("error"+err)
-        }else{
+        userAdd.save(function (err, success) {
+            if (err) {
+                res.send("error" + err)
+            } else {
 
-            res.send('user created')
+                res.send('user created')
 
-        }
-    });
+            }
+        });
 
-
+    }
 };

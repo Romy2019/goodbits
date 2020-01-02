@@ -12,40 +12,46 @@ function generateJWT(_id) {
 }
 
 exports.userLogIn = function (req, res) {
-    const userlog = req.body;
-    addUser.userTable.find({'userName': userlog.userName}, (err, docs) => {
-        console.log(docs);
+    if (!req.body.userName || !req.body.password) {
 
-        if (err) {
+        return res.status(500).send("object missing");
+    }
+    else {
+        const userlog = req.body;
+        addUser.userTable.find({'userName': userlog.userName}, (err, docs) => {
+            console.log(docs);
 
-            return res.status(500).send("Error getting user");
-        }
+            if (err) {
 
-        //if user found.
-        if (docs.length < 1 || docs == undefined||docs.length >1) {
-            res.status(401).send("invalid log in");//empty
-        } else {
-            if (Bcrypt.compareSync(userlog.password, docs[0].password)/*docs[0].password === userlog.password*/) {
-                const token = generateJWT(docs[0]._id);
-                let result = {
-                    status: "success",
-                    data: {
-                        userName: userlog.userName,
-                        token: token
-                    }
-                };
-                res.status(200).send(result);
-            } else {
-                res.status(401).send("invalid log in");//empty
+                return res.status(500).send("Error getting user");
             }
 
 
-        }
+            //if user found.
+            if (docs.length < 1 || docs == undefined || docs.length > 1) {
+                res.status(401).send("invalid log in");//empty
+            } else {
+                if (Bcrypt.compareSync(userlog.password, docs[0].password)/*docs[0].password === userlog.password*/) {
+                    const token = generateJWT(docs[0]._id);
+                    let result = {
+                        status: " log in success",
+                        data: {
+                            userName: userlog.userName,
+                            token: token
+                        }
+                    };
+                    res.status(200).send(result);
 
-        // return results;//console.log('logged in user' + userlog.userName);
+                } else {
+                    res.status(401).send("invalid log in");//empty
+                }
 
 
-    });
+            }
 
+
+
+        });
+    }
 
 };
