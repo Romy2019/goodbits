@@ -6,7 +6,8 @@ const Bcrypt = require("bcryptjs");
 
 
 exports.userSignUp = function(req, res) {
-    request.body.password = Bcrypt.hashSync(request.body.password, 10);
+
+    req.body.password = Bcrypt.hashSync(req.body.password, 10);
 
     const userAdd = new addUser.userTable(req.body);
 

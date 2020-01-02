@@ -1,7 +1,9 @@
 const addUser = require('../../models/userTable');
 const jwt = require('jsonwebtoken');
+const express = require('express');
 const TOKEN_SECRET = "D0dKsugPi5r}Viv";
 const BodyParser = require("body-parser");
+const Mongoose = require("mongoose");
 const Bcrypt = require("bcryptjs");
 
 function generateJWT(_id) {
